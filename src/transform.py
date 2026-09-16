@@ -1,24 +1,5 @@
 import pandas as pd
 
-REQUIRED_COLUMNS = {
-            "order_id",
-            "order_date",
-            "customer_id",
-            "region",
-            "product_category",
-            "quantity",
-            "unit_price",
-            "discount",
-            "returned",
-}
-
-def prepare_history(data: pd.DataFrame) -> pd.DataFrame:
-    missing_columns = REQUIRED_COLUMNS.difference(data.columns)
-    if missing_columns:
-        missing = ", ".join(sorted(missing_columns))
-        raise ValueError(f"Sakande kolumner: {missing}")
-    return data
-
 def clean_region(data: pd.DataFrame) -> pd.DataFrame:
     data["region"] = (data["region"]
         .fillna("Unknown")
@@ -79,7 +60,6 @@ def calculate_order_values(data: pd.DataFrame) -> pd.DataFrame:
 
 
 def transform_data(data: pd.DataFrame) -> pd.DataFrame:
-    data = prepare_history(data)
     data = clean_region(data)
     data = clean_product_category(data)
     data = clean_quantity(data)
