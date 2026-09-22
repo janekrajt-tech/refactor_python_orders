@@ -1,4 +1,3 @@
-import pandas as pd 
 import logging 
 
 from config import ReportConfig
@@ -8,12 +7,24 @@ from transform import transform_data
 from validate import validate_columns
 from report import create_sales_by_category, create_sales_by_region, create_overview, create_returns_by_category
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+
+
 def run_report(config: ReportConfig) -> None:
     data = load_data(config.input_path)
+    logger.info("Läste inn %s rader", len(data))
 
     data = validate_columns(data)
+    logger.info("Validering av kolumner är klar")
 
     data = transform_data(data)
+    logger.info("Datatransformering klar")
 
     sales_by_category = create_sales_by_category(data)
     sales_by_region = create_sales_by_region(data)
@@ -23,4 +34,7 @@ def run_report(config: ReportConfig) -> None:
     save_report(sales_by_region, config.output_dir / "sales_by_region.csv")
     save_report(returns_by_category, config.output_dir / "returns_by_category.csv")
     save_report(overview, config.output_dir / "overview.csv")
-    
+    logger.info("Rapporter sparade")
+if __name__ == "__main__":
+    config = ReportConfig()
+    run_report(config)

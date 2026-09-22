@@ -4,4 +4,4 @@ from pathlib import Path
 @dataclass(frozen=True)
 class ReportConfig:
     input_path: Path = Path("data/orders.csv")
-    output_dir: Path = Path("output")
+    output_dir: Path = Path("output_new")
